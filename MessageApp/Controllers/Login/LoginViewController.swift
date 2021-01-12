@@ -106,11 +106,13 @@ class LoginViewController: UIViewController {
                 alertUserLoginError()
                 return
         }
-        Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] (authResult, error) in
+            guard let strongSelf = self else { return }
             if let e = error {
                 print(e.localizedDescription)
             } else {
                 print("Logged in user\(String(describing: authResult?.user))")
+                strongSelf.navigationController?.dismiss(animated: true)
             }
         }
     }
